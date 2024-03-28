@@ -1,4 +1,4 @@
-pub(crate) use std::time::Duration;
+use std::time::Duration;
 use std::thread::sleep;
 
 use nrf24l01::{RXConfig, NRF24L01, PALevel, OperatingMode};
