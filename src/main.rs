@@ -20,7 +20,7 @@ fn main() {
         .build();
     spi.configure(&options).expect("SPI configuration");
 
-    let mut chip = Chip::new("/dev/gpiochip0").unwrap();
+    let mut chip = Chip::new("/dev/gpiochip4").unwrap();
     let handle = chip.get_line(27).unwrap(); // Get LineHandle using pin number
     let req_flags = LineRequestFlags::OUTPUT;
     let ce = match CdevPin::new(handle.request(req_flags, 0, "my_ce_pin").unwrap()) {
