@@ -7,7 +7,7 @@ edition = "2021"
 [dependencies]
 embedded-nrf24l01 = { git = "https://github.com/astro/embedded-nrf24l01"}
 embedded-hal = { version = "1.0.0" }
-linux-embedded-hal = { version = "0.4", features = ["spi", "gpio_sysfs"] }
+linux-embedded-hal = { version = "0.4", features = ["spi", "gpio_cdev"] }
 #spidev = "0.6.0"
 #sysfs_gpio = "0.6.1"
 
