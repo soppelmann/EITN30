@@ -3,7 +3,6 @@ use std::thread::sleep;
 
 use nrf24l01::{TXConfig, NRF24L01, PALevel, OperatingMode};
 
-
 fn main() {
     println!("Hello, world!\n");
     println!("I am a pie!");
@@ -17,7 +16,7 @@ fn main() {
         ..Default::default()
     };
 
-    let mut device = NRF24L01::new(25, 0, 0).unwrap();
+    let mut device = NRF24L01::new(17, 1, 0).unwrap();
     let message = b"sendtest";
     device.configure(&OperatingMode::TX(config)).unwrap();
     device.flush_output().unwrap();
@@ -32,6 +31,7 @@ fn main() {
             }
         };
         sleep(Duration::from_millis(5000));
+        break;
     }
 
 }
