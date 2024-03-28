@@ -4,10 +4,12 @@ use embedded_nrf24l01::{Configuration, NRF24L01, CrcMode, DataRate};
 
 
 use linux_embedded_hal::spidev::{self, SpidevOptions};
-use linux_embedded_hal::sysfs_gpio::Direction;
+//use linux_embedded_hal::sysfs_gpio::Direction;
 //use linux_embedded_hal::Delay;
-use linux_embedded_hal::{SysfsPin, SpidevDevice};
-//use linux_embedded_hal::{CdevPin, SpidevDevice};
+//use linux_embedded_hal::{SysfsPin, SpidevDevice};
+use linux_embedded_hal::{CdevPin, SpidevDevice};
+
+use linux_embedded_hal::gpio_cdev::{Chip, LineRequestFlags};
 
 fn main() {
 
@@ -20,12 +22,22 @@ fn main() {
     .build();
     spi.configure(&options).expect("SPI configuration");
 
+
+    let mut chip = Chip::new("/dev/gpiochip0").unwrap();
+    let handle = chip.get_line(27).unwrap(); // Get LineHandle using pin number
+    let req_flags = LineRequestFlags::OUTPUT;
+    let ce = match CdevPin::new(handle.request(req_flags, 0, "my_ce_pin").unwrap()) {
+        Ok(pin) => pin,
+        Err(error) => panic!("Failed to create CdevPin: {}", error), // Handle the error
+    };
+
+
     // maybe use CdevPin instead of SysfsPin
-    let ce = SysfsPin::new(27);
-    ce.export().expect("ce export");
-    while !ce.is_exported() {}
-    ce.set_direction(Direction::Out).expect("CE Direction");
-    ce.set_value(1).expect("CE Value set to 1");
+    //let ce = SysfsPin::new(27);
+    //ce.export().expect("ce export");
+    //while !ce.is_exported() {}
+    //ce.set_direction(Direction::Out).expect("CE Direction");
+    //ce.set_value(1).expect("CE Value set to 1");
 
 
     println!("Hello, world!");
