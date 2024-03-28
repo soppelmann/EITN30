@@ -1,9 +1,12 @@
 [package]
-name = "EITN30"
+name = "eitn_30"
 version = "0.1.0"
 edition = "2021"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
-
 [dependencies]
-embedded-nrf24l01 = "0.2.0"
+
+[dependencies.nrf24l01]
+features = ["rpi_accel"]
+default-features = false
+git='https://github.com/blennster/rust-nrf24l01.git'
