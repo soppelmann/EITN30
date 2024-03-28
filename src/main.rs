@@ -3,19 +3,23 @@ use std::io;
 use embedded_nrf24l01::NRF24L01;
 
 
+use linux_embedded_hal::spidev::{self, SpidevOptions};
+use linux_embedded_hal::sysfs_gpio::Direction;
+use linux_embedded_hal::Delay;
+use linux_embedded_hal::{SysfsPin, SpidevDevice};
 
-use linux_embedded_hal as hal;
-
-use hal::spidev::{self, SpidevOptions};
-
-use hal::SysfsPin;
-use hal::SpidevDevice;
-use hal::SpidevBus;
-
-use hal::sysfs_gpio::Direction;
 
 fn main() {
-    let mut spi = spidev::Spidev::open("/dev/spidev0.0").unwrap();
+
+    // Configure SPI
+    let mut spi = SpidevDevice::open("/dev/spidev0.0").expect("SPI device");
+    let options = SpidevOptions::new()
+    .bits_per_word(8)
+    .max_speed_hz(4_000_000)
+    .mode(spidev::SpiModeFlags::SPI_MODE_0)
+    .build();
+spi.configure(&options).expect("SPI configuration");
+
     println!("Hello, world!");
 
 

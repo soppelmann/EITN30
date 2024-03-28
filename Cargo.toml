@@ -6,7 +6,7 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 [dependencies]
 embedded-nrf24l01 = { git = "https://github.com/astro/embedded-nrf24l01"}
-#embedded-hal = { version = "1.0.0" }
+embedded-hal = { version = "1.0.0" }
 linux-embedded-hal = { version = "0.4", features = ["spi", "gpio_sysfs"] }
 #spidev = "0.6.0"
 #sysfs_gpio = "0.6.1"
