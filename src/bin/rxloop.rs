@@ -27,10 +27,7 @@ fn main() {
     let mut chip = Chip::new("/dev/gpiochip4").unwrap();
     let handle = chip.get_line(27).unwrap(); // Get LineHandle using pin number
     let req_flags = LineRequestFlags::OUTPUT;
-    let ce = match CdevPin::new(handle.request(req_flags, 0, "my_ce_pin").unwrap()) {
-        Ok(pin) => pin,
-        Err(error) => panic!("Failed to create CdevPin: {}", error), // Handle the error
-    };
+    let ce = CdevPin::new(handle.request(req_flags, 0, "my_ce_pin").unwrap()).expect("CE pin");
 
     println!("Hello, world!");
 
@@ -83,10 +80,11 @@ fn main() {
            let payload = nrf24.read();
            match payload {
                Ok(p) => {
+                   println!("Got payload = {:?}", p.as_ref())
                    //println!("Got payload = {}", p.as_ref());
-                   buf.copy_from_slice(p.as_ref());
-                   let num = u32::from_le_bytes(buf);
-                   println!("Got message = {:?}", num);
+               //     buf.copy_from_slice(p.as_ref());
+               //     let num = u32::from_le_bytes(buf);
+               //     println!("Got message = {:?}", num);
                }
                Err(_) => {
                    println!("Could not read payload");
