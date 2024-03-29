@@ -1,19 +1,19 @@
-use std::time::Duration;
 use std::thread::sleep;
+use std::time::Duration;
 
-use nrf24l01::{TXConfig, NRF24L01, PALevel, OperatingMode};
+use nrf24l01::{OperatingMode, PALevel, TXConfig, NRF24L01};
 
 fn main() {
     let config = TXConfig {
         channel: 108,
         pa_level: PALevel::Low,
         pipe0_address: *b"abc",
-        max_retries: 3,
+        max_retries: 255,
         retry_delay: 2,
         ..Default::default()
     };
 
-    let mut device = NRF24L01::new(27, 0, 0).unwrap();
+    let mut device = NRF24L01::new(17, 0, 0).unwrap();
     let message = b"sendtest";
     device.configure(&OperatingMode::TX(config)).unwrap();
     device.flush_output().unwrap();

@@ -1,7 +1,7 @@
-use std::time::Duration;
 use std::thread::sleep;
+use std::time::Duration;
 
-use nrf24l01::{RXConfig, NRF24L01, PALevel, OperatingMode};
+use nrf24l01::{OperatingMode, PALevel, RXConfig, NRF24L01};
 
 fn main() {
     let config = RXConfig {
@@ -11,7 +11,7 @@ fn main() {
         ..Default::default()
     };
 
-    let mut device = NRF24L01::new(27, 0, 0).unwrap();
+    let mut device = NRF24L01::new(17, 0, 0).unwrap();
     device.configure(&OperatingMode::RX(config)).unwrap();
 
     device.listen().unwrap();
