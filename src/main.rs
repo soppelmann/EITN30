@@ -62,4 +62,42 @@ fn main() {
     nrf24.set_tx_addr(&b"fnord"[..]).unwrap();
     nrf24.flush_rx().unwrap();
     nrf24.flush_tx().unwrap();
+
+    // Transmit
+    let mut nrf24 = nrf24.tx().unwrap(); //default configuration from example
+    let mut counter: u32 = 0;
+
+    loop {
+        ufmt::uwriteln!(&mut serial, "Sending number:{:?}", counter).unwrap();
+        if let Err(e) = nrf24.send(&counter.to_le_bytes()) {
+            ufmt::uwriteln!(&mut serial, "Error").unwrap();
+        }
+
+        counter = counter.overflowing_add(1).0;
+        delay.delay_ms(2000u16);
+    }
+
+    // Receive
+    let mut nrf24 = nrf24.rx().unwrap(); //default configuration from example
+    let mut buff: [u8; 4] = [0; 4];
+    delay.delay_us(130u8);
+
+    loop {
+        rprintln!("Receiving data...");
+
+        if nrf24.can_read().is_ok() {
+            let payload = nrf24.read();
+            match payload {
+                Ok(p) => {
+                    buff.copy_from_slice(p.as_ref());
+                    let num = u32::from_le_bytes(buff); //if we dont do this line and just print p everything works
+
+                    rprintln!("Got message = {:?}", num);
+                }
+                Err(_) => {
+                    rprintln!("Could not read payload");
+                }
+            }
+        }
+    }
 }
