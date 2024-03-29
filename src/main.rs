@@ -11,7 +11,7 @@ use linux_embedded_hal::{CdevPin, SpidevDevice};
 
 use linux_embedded_hal::gpio_cdev::{Chip, LineRequestFlags};
 
-use ufmt::{derive::uDebug, uwrite};
+// use ufmt::{derive::uDebug, uwrite};
 
 fn main() {
     // Configure SPI https://docs.rs/ssd1675/latest/ssd1675/interface/struct.Interface.html
@@ -83,7 +83,7 @@ fn main() {
         }
     }
 
-    let mut nrf24 = nrf24.standby().unwrap();
+    let nrf24 = nrf24.standby().unwrap();
 
     // Receive
     let mut nrf24 = nrf24.rx().unwrap(); //default configuration from example
