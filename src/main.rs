@@ -1,14 +1,17 @@
 //use std::io;
 
+use embedded_hal::delay::DelayNs;
 use embedded_nrf24l01::{Configuration, CrcMode, DataRate, NRF24L01};
 
 use linux_embedded_hal::spidev::{self, SpidevOptions};
 //use linux_embedded_hal::sysfs_gpio::Direction;
-//use linux_embedded_hal::Delay;
+use linux_embedded_hal::Delay as delay;
 //use linux_embedded_hal::{SysfsPin, SpidevDevice};
 use linux_embedded_hal::{CdevPin, SpidevDevice};
 
 use linux_embedded_hal::gpio_cdev::{Chip, LineRequestFlags};
+
+use ufmt::{derive::uDebug, uwrite};
 
 fn main() {
     // Configure SPI https://docs.rs/ssd1675/latest/ssd1675/interface/struct.Interface.html
@@ -68,34 +71,39 @@ fn main() {
     let mut counter: u32 = 0;
 
     loop {
-        ufmt::uwriteln!(&mut serial, "Sending number:{:?}", counter).unwrap();
+        println!("Sending number:{:?}", counter);
         if let Err(e) = nrf24.send(&counter.to_le_bytes()) {
-            ufmt::uwriteln!(&mut serial, "Error").unwrap();
+            eprintln!("Error sending data: {:?}", e);
         }
 
         counter = counter.overflowing_add(1).0;
-        delay.delay_ms(2000u16);
+        delay.delay_ms(2000u32);
+        if counter > 5 {
+            break;
+        }
     }
+
+    let mut nrf24 = nrf24.standby().unwrap();
 
     // Receive
     let mut nrf24 = nrf24.rx().unwrap(); //default configuration from example
     let mut buff: [u8; 4] = [0; 4];
-    delay.delay_us(130u8);
+    delay.delay_us(130u32);
 
     loop {
-        rprintln!("Receiving data...");
+        println!("Receiving data...");
 
         if nrf24.can_read().is_ok() {
             let payload = nrf24.read();
             match payload {
                 Ok(p) => {
                     buff.copy_from_slice(p.as_ref());
-                    let num = u32::from_le_bytes(buff); //if we dont do this line and just print p everything works
+                    let num = u32::from_le_bytes(buff);
 
-                    rprintln!("Got message = {:?}", num);
+                    println!("Got message = {:?}", num);
                 }
                 Err(_) => {
-                    rprintln!("Could not read payload");
+                    println!("Could not read payload");
                 }
             }
         }

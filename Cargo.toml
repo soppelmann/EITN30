@@ -10,6 +10,7 @@ embedded-hal = { version = "1.0.0" }
 linux-embedded-hal = { version = "0.4", features = ["spi", "gpio_cdev"] }
 #spidev = "0.6.0"
 #sysfs_gpio = "0.6.1"
+ufmt = "0.2.0"
 
 [package.metadata.cross.build]
 default-target = "armv8-unknown-linux-gnueabihf"
