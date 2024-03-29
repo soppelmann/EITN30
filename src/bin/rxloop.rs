@@ -23,7 +23,6 @@ fn main() {
         .build();
     spi.configure(&options).expect("SPI configuration");
 
-
     // Configure CE pin
     let mut chip = Chip::new("/dev/gpiochip4").unwrap();
     let handle = chip.get_line(17).unwrap(); // Get LineHandle using pin number
@@ -59,7 +58,6 @@ fn main() {
 
     // Print addresswidth
     println!("Address width is: {}", nrf24.get_address_width().unwrap());
-
 
     // Receive
     let mut nrf24 = nrf24.rx().unwrap(); //default configuration from example
