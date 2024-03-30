@@ -10,12 +10,9 @@ fn main() {
         pipe0_address: *b"abcde",
         ..Default::default()
     };
-
     let mut device = NRF24L01::new(17, 0, 0).unwrap();
     device.configure(&OperatingMode::RX(config)).unwrap();
-
     device.listen().unwrap();
-
     loop {
         sleep(Duration::from_millis(500));
         if device.data_available().unwrap() {
@@ -25,6 +22,8 @@ fn main() {
                     println!("Payload {:?}", packet);
                 })
                 .unwrap();
+            // prepare ack payload for next reception
+            device.push(0, b"ack payload").unwrap();
         }
     }
 }

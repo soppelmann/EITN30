@@ -12,16 +12,26 @@ fn main() {
         retry_delay: 2,
         ..Default::default()
     };
-
     let mut device = NRF24L01::new(17, 0, 0).unwrap();
     let message = b"sendtest";
     device.configure(&OperatingMode::TX(config)).unwrap();
     device.flush_output().unwrap();
-
     loop {
         device.push(0, message).unwrap();
         match device.send() {
-            Ok(retries) => println!("Message sent, {} retries needed", retries),
+            Ok(retries) => {
+                println!("Message sent, {} retries needed", retries);
+                if device.data_available().unwrap() {
+                    device
+                        .read_all(|packet| {
+                            println!("Received back {:?} bytes", packet.len());
+                            println!("ACK Payload {:?}", packet)
+                        })
+                        .unwrap();
+                } else {
+                    println!("Blank ACK")
+                }
+            }
             Err(err) => {
                 println!("Destination unreachable: {:?}", err);
                 device.flush_output().unwrap()
