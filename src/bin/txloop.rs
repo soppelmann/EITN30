@@ -6,8 +6,8 @@ use nrf24l01::{OperatingMode, PALevel, TXConfig, NRF24L01};
 fn main() {
     let config = TXConfig {
         channel: 108,
-        pa_level: PALevel::Low,
-        pipe0_address: *b"abc",
+        pa_level: PALevel::Min,
+        pipe0_address: *b"abcde",
         max_retries: 255,
         retry_delay: 2,
         ..Default::default()

@@ -6,8 +6,8 @@ use nrf24l01::{OperatingMode, PALevel, RXConfig, NRF24L01};
 fn main() {
     let config = RXConfig {
         channel: 108,
-        pa_level: PALevel::Low,
-        pipe0_address: *b"abc",
+        pa_level: PALevel::Min,
+        pipe0_address: *b"abcde",
         ..Default::default()
     };
 
