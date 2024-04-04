@@ -25,7 +25,8 @@ fn main() {
                     device
                         .read_all(|packet| {
                             println!("Received back {:?} bytes", packet.len());
-                            println!("ACK Payload {:?}", packet)
+                            println!("ACK Payload {:?}", packet);
+                            println!("ACK Payload: {}", String::from_utf8(packet));
                         })
                         .unwrap();
                 } else {
