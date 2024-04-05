@@ -26,7 +26,7 @@ fn main() {
                         .read_all(|packet| {
                             println!("Received back {:?} bytes", packet.len());
                             println!("ACK Payload {:?}", packet);
-                            println!("ACK Payload: {}", String::from_utf8_lossy(packet));
+                            println!("ACK Payload: {:?}", String::from_utf8_lossy(packet));
                         })
                         .unwrap();
                 } else {
