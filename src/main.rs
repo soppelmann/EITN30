@@ -1,18 +1,20 @@
 use eitn_30::{rxloop::rx_loop, txloop::tx_loop};
 use std::env;
-//use std::thread;
+use std::thread;
 
-// fn tx_wrap() {
-//     thread::spawn(move || {
-//         tx_loop();
-//     });
-// }
+fn tx_wrap() {
+    let tx_handler = thread::spawn(move || {
+        tx_loop();
+    });
+    tx_handler.join().unwrap();
+}
 
-// fn rx_wrap() {
-//     thread::spawn(move || {
-//         rx_loop();
-//     });
-// }
+fn rx_wrap() {
+    let rx_handler = thread::spawn(move || {
+        rx_loop();
+    });
+    rx_handler.join().unwrap();
+}
 
 fn main() {
     println!("Welcome to PiNET!");
@@ -25,8 +27,8 @@ fn main() {
 
     let flag = &args[1];
     match flag.as_str() {
-        "-tx" => tx_loop(),
-        "-rx" => rx_loop(),
+        "-tx" => tx_wrap(),
+        "-rx" => rx_wrap(),
         _ => println!("Invalid flag. Use either -tx or -rx."),
     }
 }
