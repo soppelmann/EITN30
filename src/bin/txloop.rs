@@ -1,33 +1,13 @@
 use std::thread::sleep;
 use std::time::Duration;
+use std::io::{Read, Write};
+use std::thread;
+use eitn_30 as lib;
 
 use nrf24l01::{OperatingMode, PALevel, TXConfig, NRF24L01};
 
-// Function that configures TXConfig and takes channel, pipe0_address, ce_pin, spi_port, spi_device as arguemnt
-fn tx_setup(chan: u8, address: [u8; 5], pin: u64, port: u8, device: u8) -> NRF24L01 {
-    if address.len() != 5 {
-        panic!("Pipe0 address should be 5 bytes long");
-    }
-
-    let config = TXConfig {
-        channel: chan,
-        pa_level: PALevel::Min,
-        pipe0_address: address,
-        max_retries: 255,
-        retry_delay: 2,
-        ..Default::default()
-    };
-
-    let mut device = NRF24L01::new(pin, port, device).unwrap();
-    device.configure(&OperatingMode::TX(config)).unwrap();
-    device.flush_output().unwrap();
-    device.flush_input().unwrap();
-
-    return device;
-}
-
 fn main() {
-    let mut device = tx_setup(108, *b"abcde", 17, 0, 0);
+    let mut device = lib::tx_setup(108, *b"abcde", 17, 0, 0);
 
     let message = b"sendtest";
     loop {
