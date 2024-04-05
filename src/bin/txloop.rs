@@ -27,6 +27,7 @@ fn tx_setup(
     let mut device = NRF24L01::new(pin, port, device).unwrap();
     device.configure(&OperatingMode::TX(config)).unwrap();
     device.flush_output().unwrap();
+    device.flush_input().unwrap();
 
     return device;
 }
