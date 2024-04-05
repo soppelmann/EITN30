@@ -1,4 +1,6 @@
 use nrf24l01::{OperatingMode, PALevel, RXConfig, TXConfig, NRF24L01};
+pub mod rxloop;
+pub mod txloop;
 
 pub fn rx_setup(chan: u8, address: [u8; 5], pin: u64, port: u8, device: u8) -> NRF24L01 {
     if address.len() != 5 {

@@ -1,13 +1,9 @@
 use std::thread::sleep;
 use std::time::Duration;
-use std::io::{Read, Write};
-use std::thread;
-use eitn_30 as lib;
+use crate::rx_setup;
 
-use nrf24l01::{OperatingMode, PALevel, RXConfig, NRF24L01};
-
-fn main() {
-    let mut device = lib::rx_setup(108, *b"abcde", 17, 0, 0);
+pub fn rx_loop() {
+    let mut device = rx_setup(108, *b"abcde", 17, 0, 0);
 
     loop {
         sleep(Duration::from_millis(500));

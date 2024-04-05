@@ -1,13 +1,9 @@
 use std::thread::sleep;
 use std::time::Duration;
-use std::io::{Read, Write};
-use std::thread;
-use eitn_30 as lib;
+use crate::tx_setup;
 
-use nrf24l01::{OperatingMode, PALevel, TXConfig, NRF24L01};
-
-fn main() {
-    let mut device = lib::tx_setup(108, *b"abcde", 17, 0, 0);
+pub fn tx_loop() {
+    let mut device = tx_setup(108, *b"abcde", 17, 0, 0);
 
     let message = b"sendtest";
     loop {
