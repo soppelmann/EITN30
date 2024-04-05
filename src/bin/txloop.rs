@@ -4,13 +4,7 @@ use std::time::Duration;
 use nrf24l01::{OperatingMode, PALevel, TXConfig, NRF24L01};
 
 // Function that configures TXConfig and takes channel, pipe0_address, ce_pin, spi_port, spi_device as arguemnt
-fn tx_setup(
-    chan: u8,
-    address: [u8; 5],
-    pin: u64,
-    port: u8,
-    device: u8,
-) -> NRF24L01 {
+fn tx_setup(chan: u8, address: [u8; 5], pin: u64, port: u8, device: u8) -> NRF24L01 {
     if address.len() != 5 {
         panic!("Pipe0 address should be 5 bytes long");
     }
