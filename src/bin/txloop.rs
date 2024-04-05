@@ -3,19 +3,38 @@ use std::time::Duration;
 
 use nrf24l01::{OperatingMode, PALevel, TXConfig, NRF24L01};
 
-fn main() {
+// Function that configures TXConfig and takes channel, pipe0_address, ce_pin, spi_port, spi_device as arguemnt
+fn tx_setup(
+    chan: u8,
+    address: [u8; 5],
+    pin: u64,
+    port: u8,
+    device: u8,
+) -> NRF24L01 {
+    if address.len() != 5 {
+        panic!("Pipe0 address should be 5 bytes long");
+    }
+
     let config = TXConfig {
-        channel: 108,
+        channel: chan,
         pa_level: PALevel::Min,
-        pipe0_address: *b"abcde",
+        pipe0_address: address,
         max_retries: 255,
         retry_delay: 2,
         ..Default::default()
     };
-    let mut device = NRF24L01::new(17, 0, 0).unwrap();
-    let message = b"sendtest";
+
+    let mut device = NRF24L01::new(pin, port, device).unwrap();
     device.configure(&OperatingMode::TX(config)).unwrap();
     device.flush_output().unwrap();
+
+    return device;
+}
+
+fn main() {
+    let mut device = tx_setup(108, *b"abcde", 17, 0, 0);
+
+    let message = b"sendtest";
     loop {
         device.push(0, message).unwrap();
         match device.send() {
@@ -26,7 +45,6 @@ fn main() {
                         .read_all(|packet| {
                             println!("Received back {:?} bytes", packet.len());
                             println!("ACK Payload {:?}", packet);
-                            println!("ACK Payload: {:?}", String::from_utf8_lossy(packet));
                         })
                         .unwrap();
                 } else {
@@ -38,6 +56,6 @@ fn main() {
                 device.flush_output().unwrap()
             }
         };
-        sleep(Duration::from_millis(10000));
+        sleep(Duration::from_millis(5000));
     }
 }
