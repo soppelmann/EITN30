@@ -1,6 +1,6 @@
+use crate::tx_setup;
 use std::thread::sleep;
 use std::time::Duration;
-use crate::tx_setup;
 
 pub fn tx_loop() {
     let mut device = tx_setup(108, *b"abcde", 17, 0, 0);

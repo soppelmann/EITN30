@@ -1,6 +1,6 @@
+use crate::rx_setup;
 use std::thread::sleep;
 use std::time::Duration;
-use crate::rx_setup;
 
 pub fn rx_loop() {
     let mut device = rx_setup(108, *b"abcde", 17, 0, 0);

@@ -1,5 +1,18 @@
 use eitn_30::{rxloop::rx_loop, txloop::tx_loop};
 use std::env;
+//use std::thread;
+
+// fn tx_wrap() {
+//     thread::spawn(move || {
+//         tx_loop();
+//     });
+// }
+
+// fn rx_wrap() {
+//     thread::spawn(move || {
+//         rx_loop();
+//     });
+// }
 
 fn main() {
     println!("Welcome to PiNET!");
