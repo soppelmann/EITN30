@@ -42,5 +42,5 @@ pub fn tx_setup(chan: u8, address: [u8; 5], pin: u64, port: u8, device: u8) -> N
     device.flush_output().unwrap();
     device.flush_input().unwrap();
 
-    return device;
+    device
 }
