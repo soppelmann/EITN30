@@ -19,13 +19,12 @@ fn main() {
     };
 
     //let mut device_1 = NRF24L01::new(17, 0, 0).unwrap();
-    let mut device_2 = NRF24L01::new(27, 1, 1).unwrap();
-    
-    
+    let mut device_2 = NRF24L01::new(27, 0, 1).unwrap();
+
     device_2.configure(&OperatingMode::RX(config_2)).unwrap();
     device_2.listen().unwrap();
     loop {
-        sleep(Duration::from_millis(500));
+        sleep(Duration::from_millis(2000));
         if device_2.data_available().unwrap() {
             device_2
                 .read_all(|packet| {
@@ -34,8 +33,12 @@ fn main() {
                     println!("Payload: {:?}", String::from_utf8_lossy(packet));
                 })
                 .unwrap();
-            // prepare ack payload for next reception
-            device_2.push(0, b"ack payload").unwrap();
+            if let Err(err) = device_2.push(0, b"ack payload") {
+                println!("Error while pushing payload: {:?}", err);
+            } else {
+                // prepare ack payload for next reception
+                device_2.push(0, b"ack payload").unwrap();
+            }
         }
     }
 }
