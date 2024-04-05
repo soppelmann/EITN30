@@ -12,7 +12,7 @@ fn main() {
         retry_delay: 2,
         ..Default::default()
     };
-    let mut device = NRF24L01::new(27, 0, 1).unwrap();
+    let mut device = NRF24L01::new(17, 0, 0).unwrap();
     let message = b"sendtest";
     device.configure(&OperatingMode::TX(config)).unwrap();
     device.flush_output().unwrap();
