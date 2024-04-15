@@ -52,3 +52,20 @@ cargo run --basestation
 ```bash
 cargo run --mobile
 ```
+
+## TUN interface
+
+The TUN interface is a virtual network device that allows us to send and receive
+packets from userspace. We use this to create a bridge between the ethernet and
+the nrf24l01 link.
+
+We have three alternatives for the TUN interface:
+1. Use the `tun` crate. https://crates.io/crates/tun
+2. Use the `tun-tap` crate. https://crates.io/crates/tun-tap
+3. Use the `tokio-tun` crate. https://crates.io/crates/tokio-tun
+
+We might choose to use the `tun` crate because it is the most lightweight and
+simplest to use. tokio-tun is a good alternative if we want to use tokio for
+asyncronous programming. This might be explored in the future. Async rust is a
+bit tricky to get right. Best would probably be to create a separate tokio
+runtime instead of declaring main as async.
