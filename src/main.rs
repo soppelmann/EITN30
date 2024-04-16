@@ -45,7 +45,7 @@ fn main() -> Result<()> {
         .mtu(900)
         .up();
 
-    let iface = tun::create(&config).unwrap();
+    let _iface = tun::create(&config).unwrap();
 
     Ok(())
 }
