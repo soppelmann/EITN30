@@ -63,12 +63,14 @@ We have three alternatives for the TUN interface:
 1. Use the `tun` crate. https://crates.io/crates/tun
 2. Use the `tun-tap` crate. https://crates.io/crates/tun-tap
 3. Use the `tokio-tun` crate. https://crates.io/crates/tokio-tun
+4. Use the `tun2' crate. https://github.com/tun2proxy/rust-tun
 
-We might choose to use the `tun` crate because it is the most lightweight and
-simplest to use. tokio-tun is a good alternative if we want to use tokio for
-asyncronous programming. This might be explored in the future. Async rust is a
-bit tricky to get right. Best would probably be to create a separate tokio
-runtime instead of declaring main as async.
+We might choose to use the `tun2` crate because it is the most lightweight and
+simplest to use. The `tun` crate is not actively maintained an tun2 is basically
+`tun` with all patches merged. tokio-tun is a good alternative if we want to use
+tokio for asyncronous programming. This might be explored in the future. Async
+rust is a bit tricky to get right. Best would probably be to create a separate
+tokio runtime instead of declaring main as async. `tun2` has support for tokio.
 
 We still need to connect the TUN interface to eth0 and enable forwarding
 (PROMISC) on eth0/tun0. This can be done as follows:
@@ -80,3 +82,6 @@ echo '1' | sudo tee /proc/sys/net/ipv4/conf/eth0/forwarding
 echo '1' | sudo tee /proc/sys/net/ipv4/conf/tun0/forwarding
 sudo iptables -A FORWARD -i tun0 -o eth0 -j ACCEPT
 ```
+
+To avoid having all traffic go through the link we will also edit the routing
+table as shown at lecture 3.
