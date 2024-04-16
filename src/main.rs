@@ -2,7 +2,8 @@ use color_eyre::eyre::Result;
 use eitn_30::{rxloop::rx_loop, txloop::tx_loop};
 use std::env;
 use std::thread;
-use tun2::platform::posix::{Reader, Writer};
+//use tun2::platform::posix::{Reader, Writer};
+use tun2 as tun;
 
 fn tx_wrap() {
     let tx_handler = thread::spawn(move || {
