@@ -11,7 +11,7 @@ pub fn rx_loop() {
             device
                 .read_all(|packet| {
                     println!("Received {:?} bytes", packet.len());
-                    println!("Payload {:?}", packet);
+                    println!("Payload {}", String::from_utf8_lossy(packet));
                 })
                 .unwrap();
             // prepare ack payload for next reception

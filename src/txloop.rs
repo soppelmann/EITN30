@@ -15,7 +15,7 @@ pub fn tx_loop() {
                     device
                         .read_all(|packet| {
                             println!("Received back {:?} bytes", packet.len());
-                            println!("ACK Payload {:?}", packet);
+                            println!("ACK Payload {}", String::from_utf8_lossy(packet));
                         })
                         .unwrap();
                 } else {
