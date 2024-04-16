@@ -85,3 +85,10 @@ sudo iptables -A FORWARD -i tun0 -o eth0 -j ACCEPT
 
 To avoid having all traffic go through the link we will also edit the routing
 table as shown at lecture 3.
+
+## Technical details
+
+All network interfaces follow the unix ideology of "everything is a file".
+This means that we can read and write to the network interfaces as if they were
+files as they are represented as file descriptors in the kernel. Such as
+`/dev/tun0` etc.
