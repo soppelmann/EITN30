@@ -110,3 +110,11 @@ sudo setcap cap_net_raw,cap_net_admin=eip /usr/bin/tcpdump
 #logout and log back in
 ```
 Then a remote packet capture can be instanciated through wireshark.
+
+To create tun/tap interface you need to either be root or have the cap_net_admin
+permission. Best way to do that is to add the capability to the executable using
+setcap(8). Its done the following way
+
+```bash
+sudo setcap cap_net_admin=+pe /path/to/the/executable
+```
