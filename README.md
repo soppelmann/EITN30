@@ -11,16 +11,18 @@ basestation which then sends it to the web.
 The basestation is connected to ethernet and has its eth0 interface set to
 promiscious mode. It listens for packets addressed to the mobile unit through a
 virtual TUN interface and forwards them to the mobile unit through software.
-A Promiscious interface is used to capture all packets on the network, and then
-process them to only forward the packets that are addressed to the mobile unit.
+Normally, an Interface will listen for frames intended for its own MAC address
+and will forward those frames to the cpu, it should ignore everything intended
+to every other MAC address. Promiscuous mode sets the interface to ignore
+nothing and forward everything on to the cpu.
 
 This allows us to create an userspace bridge between the ethernet and the
 nrf24l01 link.
 
 The nrf24l01 is connected to the Raspberry Pi through SPI.
 
-We have chosen Rust as the programming language for this project.
-There are two main reasons for this:
+We have chosen Rust as the programming language for this project. There are two
+main reasons for this:
 1. Rust is a systems programming language that is memory safe and has no
    garbage collector. This makes it suitable for embedded systems.
 2. We wanted to learn Rust.
@@ -76,11 +78,15 @@ We still need to connect the TUN interface to eth0 and enable forwarding
 (PROMISC) on eth0/tun0. This can be done as follows:
 
 ```bash
+sudo ip tuntap add dev longge mode tun
+sudo ip addr add 10.8.0.1/24 dev longge
+sudo ip link set longge up
+sudo ip link set longge promisc on
 echo 1 | sudo tee /proc/sys/net/ipv4/ip_forward
 sudo sysctl -w net.ipv4.ip_forward=1
 echo '1' | sudo tee /proc/sys/net/ipv4/conf/eth0/forwarding
-echo '1' | sudo tee /proc/sys/net/ipv4/conf/tun0/forwarding
-sudo iptables -A FORWARD -i tun0 -o eth0 -j ACCEPT
+echo '1' | sudo tee /proc/sys/net/ipv4/conf/longge/forwarding
+sudo iptables -A FORWARD -i longge -o eth0 -j ACCEPT
 ```
 
 To avoid having all traffic go through the link we will also edit the routing
