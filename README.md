@@ -92,3 +92,21 @@ All network interfaces follow the unix ideology of "everything is a file".
 This means that we can read and write to the network interfaces as if they were
 files as they are represented as file descriptors in the kernel. Such as
 `/dev/tun0` etc.
+
+### Packet capture
+
+While debugging its useful to capture packets. Wireshark and tcpdump are useful
+tools for this.
+In order to remotely capture packets we use wireshark on our workstations and
+tcpdump on the nodes.
+This requires a quick config, the following is required.
+
+```bash
+sudo apt install tcpdump
+sudo groupadd pcap
+sudo chgrp pcap /usr/bin/tcpdump
+sudo chmod 750 /usr/bin/tcpdump
+sudo setcap cap_net_raw,cap_net_admin=eip /usr/bin/tcpdump
+#logout and log back in
+```
+Then a remote packet capture can be instanciated through wireshark.
