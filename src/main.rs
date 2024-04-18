@@ -23,6 +23,23 @@ fn main() -> Result<()> {
     color_eyre::install()?;
     println!("Welcome to PiNET!");
 
+    let mut config = tun::Configuration::default();
+    config
+        .tun_name("longge")
+        .address((192, 168, 12, 240))
+        //.destination((192, 168, 12, 1))
+        .netmask((255, 255, 255, 0))
+        .mtu(900)
+        .up();
+
+    // Use the setcap script instead
+    // #[cfg(target_os = "linux")]
+    // config.platform_config(|config| {
+    //     config.ensure_root_privileges(true);
+    // });
+
+    let _iface = tun::create(&config).unwrap();
+
     let mut args: Vec<String> = env::args().collect();
 
     if args.len() != 2 {
@@ -35,17 +52,6 @@ fn main() -> Result<()> {
         "-rx" => rx_wrap(),
         _ => println!("Invalid flag. Use either -tx or -rx."),
     }
-
-    let mut config = tun::Configuration::default();
-    config
-        .tun_name("longge")
-        .address((192, 168, 12, 240))
-        .destination((192, 168, 12, 1))
-        .netmask((255, 255, 255, 0))
-        .mtu(900)
-        .up();
-
-    let _iface = tun::create(&config).unwrap();
 
     Ok(())
 }

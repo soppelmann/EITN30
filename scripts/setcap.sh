@@ -1,3 +1,3 @@
 #!/bin/sh
 
-sudo setcap cap_net_admin=+pe ../target/debug/eitn_30
+sudo setcap cap_net_admin=+pe ~/EITN30/target/debug/eitn_30

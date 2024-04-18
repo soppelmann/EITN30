@@ -3,7 +3,7 @@ use std::thread::sleep;
 use std::time::Duration;
 
 pub fn rx_loop() {
-    let mut device = rx_setup(108, *b"abcde", 17, 0, 0);
+    let mut device = rx_setup(108, *b"abcde", 27, 1, 0);
 
     loop {
         sleep(Duration::from_millis(500));
