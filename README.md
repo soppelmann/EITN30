@@ -87,6 +87,7 @@ sudo sysctl -w net.ipv4.ip_forward=1
 echo '1' | sudo tee /proc/sys/net/ipv4/conf/eth0/forwarding
 echo '1' | sudo tee /proc/sys/net/ipv4/conf/longge/forwarding
 sudo iptables -A FORWARD -i longge -o eth0 -j ACCEPT
+sudo iptables -A FORWARD -i eth0 -o longge -m state --state RELATED,ESTABLISHED -j ACCEPT
 ```
 
 To avoid having all traffic go through the link we will also edit the routing
