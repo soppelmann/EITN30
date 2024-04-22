@@ -56,6 +56,9 @@ pub fn tx_loop(mut writer: Writer) {
                 queue.clear();
             }
         }
+        if !queue.is_empty() {
+            chunks.push(queue);
+        }
         for slice in &chunks {
             for element in slice {
                 device.push(0, element).unwrap();

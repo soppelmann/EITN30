@@ -9,7 +9,7 @@ pub fn rx_setup(chan: u8, address: [u8; 5], pin: u64, port: u8, device: u8) -> N
 
     let config = RXConfig {
         channel: chan,
-        pa_level: PALevel::Min,
+        pa_level: PALevel::Low,
         pipe0_address: address,
         ..Default::default()
     };
@@ -30,7 +30,7 @@ pub fn tx_setup(chan: u8, address: [u8; 5], pin: u64, port: u8, device: u8) -> N
 
     let config = TXConfig {
         channel: chan,
-        pa_level: PALevel::Min,
+        pa_level: PALevel::Low,
         pipe0_address: address,
         max_retries: 255,
         retry_delay: 2,
