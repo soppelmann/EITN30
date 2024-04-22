@@ -33,8 +33,9 @@ fn main() -> Result<()> {
         //.mtu(900)
         .up();
 
-    if !Path::exists(Path::new("/proc/sys/net/ipv4/conf/longge")) {
-        config.tun_name("longge2");
+    if Path::exists(Path::new("/proc/sys/net/ipv4/conf/longge")) {
+        config.tun_name("longge2").address((172, 0, 0, 70)).netmask((255,255,255,0)).up();
+        println!("CREATING NEW INTERFACE");
     }
 
     let iface = tun::create(&config).unwrap();
