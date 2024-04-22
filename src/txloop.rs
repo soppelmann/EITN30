@@ -51,7 +51,7 @@ pub fn tx_loop(mut writer: Writer) {
         // Split the packet into 32 byte chunks that can we push to the device
         for chunk in pkt.chunks(32) {
             queue.push(chunk);
-            if queue.len() == 3 {
+            if queue.len() == 2 {
                 chunks.push(queue.clone());
                 queue.clear();
             }
