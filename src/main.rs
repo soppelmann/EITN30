@@ -1,9 +1,10 @@
 use color_eyre::eyre::Result;
 use eitn_30::{rxloop::rx_loop, txloop::tx_loop};
 use std::env;
+use std::path::Path;
 use std::thread;
-use tun2::platform::posix::{Reader, Writer};
 use tun2 as tun;
+use tun2::platform::posix::{Reader, Writer};
 
 fn tx_wrap(writer: Writer) {
     let tx_handler = thread::spawn(move || {
@@ -32,17 +33,13 @@ fn main() -> Result<()> {
         //.mtu(900)
         .up();
 
-    //Use the setcap script instead
-    #[cfg(target_os = "linux")]
-    config.platform_config(|config| {
-        config.ensure_root_privileges(true);
-    });
+    if !Path::exists(Path::new("/proc/sys/net/ipv4/conf/longge")) {
+        config.tun_name("longge2");
+    }
 
     let iface = tun::create(&config).unwrap();
 
-
     let (reader, writer) = iface.split();
-
 
     let mut args: Vec<String> = env::args().collect();
 

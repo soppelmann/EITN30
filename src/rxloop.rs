@@ -14,7 +14,7 @@ pub fn rx_loop(mut reader: Reader) {
                 .read_all(|packet| {
                     println!("Received {:?} bytes", packet.len());
                     println!("Payload {}", String::from_utf8_lossy(packet));
-                    reader.read(&mut buf).unwrap();
+                    reader.read_exact(&mut buf).unwrap();
                 })
                 .unwrap();
             // prepare ack payload for next reception
