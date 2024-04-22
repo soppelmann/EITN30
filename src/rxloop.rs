@@ -13,12 +13,20 @@ pub fn rx_loop(mut reader: Reader) {
             device
                 .read_all(|packet| {
                     println!("Received {:?} bytes", packet.len());
+                    //println!("Payload {:?}", packet);
                     println!("Payload {}", String::from_utf8_lossy(packet));
-                    reader.read_exact(&mut buf).unwrap();
+                    //reader.read_exact(&mut buf).unwrap();
                 })
                 .unwrap();
             // prepare ack payload for next reception
             device.push(0, b"ack payload").unwrap();
+            let result = reader.read(&mut buf);
+            match result {
+                Ok(n) => println!("{} bytes read from interface", n),
+                Err(err) => {
+                    println!("{} error when reading from interface", err)
+                }
+            }
         }
     }
 }
