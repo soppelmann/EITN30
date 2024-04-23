@@ -23,12 +23,12 @@ fn main() -> Result<()> {
     let tx_handler = thread::spawn(move || {
         tx_loop(reader);
     });
-    tx_handler.join().unwrap();
 
     let rx_handler = thread::spawn(move || {
         rx_loop(writer);
     });
     rx_handler.join().unwrap();
+    tx_handler.join().unwrap();
 
     Ok(())
 }
