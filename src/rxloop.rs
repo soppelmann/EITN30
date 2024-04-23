@@ -7,6 +7,14 @@ use tun2::platform::posix::Reader;
 pub fn rx_loop(mut reader: Reader) {
     let mut device = rx_setup(108, *b"abcde", 27, 1, 0);
     let mut buf = [0u8; 4096];
+    //TODO: This currently causes error on tx side
+    let result = reader.read(&mut buf);
+    match result {
+        Ok(n) => println!("{} bytes read from interface", n),
+        Err(err) => {
+            println!("{} error when reading from interface", err)
+        }
+    }
     loop {
         sleep(Duration::from_millis(1));
         if device.data_available().unwrap() {
@@ -18,13 +26,6 @@ pub fn rx_loop(mut reader: Reader) {
                     //reader.read_exact(&mut buf).unwrap();
                 })
                 .unwrap();
-            let result = reader.read(&mut buf);
-            match result {
-                Ok(n) => println!("{} bytes read from interface", n),
-                Err(err) => {
-                    println!("{} error when reading from interface", err)
-                }
-            }
         }
     }
 }

@@ -1,4 +1,5 @@
 use crate::tx_setup;
+use crate::{BUFFER_SIZE, PACKET_SIZE, QUEUE_SIZE, TX_RETRIES};
 use packet::{builder::Builder, ip};
 use std::io::Write;
 use std::net::Ipv4Addr;
@@ -35,7 +36,7 @@ pub fn tx_loop(mut writer: Writer) {
         .build();
 
     loop {
-        let mut buf = [0u8; 4096];
+        let mut buf = [0u8; BUFFER_SIZE];
 
         // get nubmer of bytes in message_packet
         let n = message_packet.as_ref().unwrap().len();
@@ -45,36 +46,34 @@ pub fn tx_loop(mut writer: Writer) {
 
         let pkt = &buf[0..n];
 
-        let mut chunks = vec![];
-        let mut queue = vec![];
-
         // Split the packet into 32 byte chunks that can we push to the device
-        for chunk in pkt.chunks(32) {
-            queue.push(chunk);
-            if queue.len() == 2 {
-                chunks.push(queue.clone());
-                queue.clear();
+        for queue in pkt.chunks(PACKET_SIZE * QUEUE_SIZE) {
+            queue.chunks(PACKET_SIZE).for_each(|pkt| {
+                // push the packet to the 3 length FIFO_QUEUE
+                device.push(0, pkt).unwrap();
+            });
+
+            // attempt transmit 10 times using device.send() with a for loop for erros
+            for i in 0..TX_RETRIES {
+                match device.send() {
+                    Ok(retries) => {
+                        println!("message sent, {} retries needed", retries);
+                        break;
+                    }
+                    Err(err) => {
+                        println!("destination unreachable: {:?}", err);
+                        if i == 9 {
+                            println!("max retries reached: {}, flushing output", i);
+                            device.flush_output().unwrap();
+                        }
+                        println!("reached: {}", i);
+                    }
+                };
             }
+
+            sleep(Duration::from_millis(50));
         }
-        if !queue.is_empty() {
-            chunks.push(queue);
-        }
-        for slice in chunks {
-            for element in slice {
-                device.push(0, element).unwrap();
-            }
-            match device.send() {
-                Ok(retries) => {
-                    println!("message sent, {} retries needed", retries);
-                }
-                Err(err) => {
-                    println!("destination unreachable: {:?}", err);
-                    device.flush_output().unwrap()
-                }
-            };
-            sleep(Duration::from_millis(5000));
-        }
-        let pkt = &buf[0..n];
+
         let result = writer.write(pkt).unwrap();
         println!("A packet containing {} bytes written to interface", result);
     }
