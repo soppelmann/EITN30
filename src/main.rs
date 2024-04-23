@@ -32,6 +32,7 @@ fn main() -> Result<()> {
         "--base" => {
             tx_address = *b"abcde";
             rx_address = *b"12345";
+            config.address((172, 0, 0, 70));
         }
         "--mobile" => {}
         _ => {
