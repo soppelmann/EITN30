@@ -25,7 +25,7 @@ pub fn rx_setup(chan: u8, address: [u8; 5], pin: u64, port: u8, device: u8) -> N
     device.flush_output().unwrap();
     device.flush_input().unwrap();
 
-    device
+    device //return
 }
 
 pub fn tx_setup(chan: u8, address: [u8; 5], pin: u64, port: u8, device: u8) -> NRF24L01 {
@@ -45,8 +45,8 @@ pub fn tx_setup(chan: u8, address: [u8; 5], pin: u64, port: u8, device: u8) -> N
 
     let mut device = NRF24L01::new(pin, port, device).unwrap();
     device.configure(&OperatingMode::TX(config)).unwrap();
-    device.flush_output().unwrap();
     device.flush_input().unwrap();
+    device.flush_output().unwrap();
 
-    device
+    device //return
 }
