@@ -73,6 +73,8 @@ pub fn tx_loop(mut writer: Writer) {
                                 println!("ACK Payload {:?}", packet);
                             })
                             .unwrap();
+                        _ = device.flush_input();
+                        _ = device.flush_output();
                     } else {
                         println!("Blank ACK")
                     }

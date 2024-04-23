@@ -1,4 +1,4 @@
-use nrf24l01::{OperatingMode, PALevel, RXConfig, TXConfig, NRF24L01};
+use nrf24l01::{DataRate, OperatingMode, PALevel, RXConfig, TXConfig, NRF24L01};
 pub mod rxloop;
 pub mod txloop;
 
@@ -11,6 +11,7 @@ pub fn rx_setup(chan: u8, address: [u8; 5], pin: u64, port: u8, device: u8) -> N
         channel: chan,
         pa_level: PALevel::Low,
         pipe0_address: address,
+        data_rate: DataRate::R2Mbps,
         ..Default::default()
     };
 
@@ -32,8 +33,9 @@ pub fn tx_setup(chan: u8, address: [u8; 5], pin: u64, port: u8, device: u8) -> N
         channel: chan,
         pa_level: PALevel::Low,
         pipe0_address: address,
-        max_retries: 255,
-        retry_delay: 2,
+        data_rate: DataRate::R2Mbps,
+        max_retries: 15,
+        retry_delay: 10,
         ..Default::default()
     };
 
