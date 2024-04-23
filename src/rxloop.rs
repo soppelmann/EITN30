@@ -1,12 +1,11 @@
-use crate::rx_setup;
 use crate::BUFFER_SIZE;
 use std::io::Write;
 use std::thread::sleep;
 use std::time::Duration;
 use tun2::platform::posix::Writer;
+use nrf24l01::NRF24L01;
 
-pub fn rx_loop(mut writer: Writer) {
-    let mut device = rx_setup(108, *b"abcde", 27, 1, 0);
+pub fn rx_loop(mut device: NRF24L01, mut writer: Writer) {
     let mut buf = [0u8; BUFFER_SIZE];
     let mut end;
     let mut emptybuf;

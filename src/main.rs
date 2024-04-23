@@ -1,5 +1,7 @@
 use color_eyre::eyre::Result;
+use eitn_30::{rx_setup, tx_setup};
 use eitn_30::{rxloop::rx_loop, txloop::tx_loop};
+use std::env;
 use std::thread;
 use tun2 as tun;
 
@@ -16,16 +18,41 @@ fn main() -> Result<()> {
         //.mtu(900)
         .up();
 
+    let mut tx_address = *b"12345";
+    let mut rx_address = *b"abcde";
+
+    let mut args: Vec<String> = env::args().collect();
+
+    if args.len() != 2 {
+        args.push("0".to_string());
+    }
+
+    let flag = &args[1];
+    match flag.as_str() {
+        "--base" => {
+            tx_address = *b"abcde";
+            rx_address = *b"12345";
+        }
+        "--mobile" => {}
+        _ => {
+            println!("Invalid flag. Use either --base or --mobile.");
+            return Ok(());
+        }
+    }
+
+    let tx_device = tx_setup(108, tx_address, 17, 0, 0);
+    let rx_device = rx_setup(108, rx_address, 27, 1, 0);
+
     let iface = tun::create(&config).unwrap();
 
     let (reader, writer) = iface.split();
 
     let tx_handler = thread::spawn(move || {
-        tx_loop(reader);
+        tx_loop(tx_device, reader);
     });
 
     let rx_handler = thread::spawn(move || {
-        rx_loop(writer);
+        rx_loop(rx_device, writer);
     });
     rx_handler.join().unwrap();
     tx_handler.join().unwrap();
