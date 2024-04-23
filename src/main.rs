@@ -6,16 +6,16 @@ use std::thread;
 use tun2 as tun;
 use tun2::platform::posix::{Reader, Writer};
 
-fn tx_wrap(writer: Writer) {
+fn tx_wrap(reader: Reader) {
     let tx_handler = thread::spawn(move || {
-        tx_loop(writer);
+        tx_loop(reader);
     });
     tx_handler.join().unwrap();
 }
 
-fn rx_wrap(reader: Reader) {
+fn rx_wrap(writer: Writer) {
     let rx_handler = thread::spawn(move || {
-        rx_loop(reader);
+        rx_loop(writer);
     });
     rx_handler.join().unwrap();
 }
@@ -54,8 +54,8 @@ fn main() -> Result<()> {
 
     let flag = &args[1];
     match flag.as_str() {
-        "-tx" => tx_wrap(writer),
-        "-rx" => rx_wrap(reader),
+        "-tx" => tx_wrap(reader),
+        "-rx" => rx_wrap(writer),
         _ => println!("Invalid flag. Use either -tx or -rx."),
     }
 
