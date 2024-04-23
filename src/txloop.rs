@@ -59,28 +59,17 @@ pub fn tx_loop(mut writer: Writer) {
         if !queue.is_empty() {
             chunks.push(queue);
         }
-        for slice in &chunks {
+        for slice in chunks {
             for element in slice {
                 device.push(0, element).unwrap();
             }
             match device.send() {
                 Ok(retries) => {
                     println!("message sent, {} retries needed", retries);
-                    if device.data_available().unwrap() {
-                        device
-                            .read_all(|packet| {
-                                println!("Received back {:?} bytes", packet.len());
-                                println!("ACK Payload {:?}", packet);
-                            })
-                            .unwrap();
-                        _ = device.flush_input();
-                        _ = device.flush_output();
-                    } else {
-                        println!("Blank ACK")
-                    }
                 }
                 Err(err) => {
                     println!("destination unreachable: {:?}", err);
+                    device.flush_output().unwrap()
                 }
             };
             sleep(Duration::from_millis(5000));

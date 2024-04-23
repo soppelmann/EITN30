@@ -8,7 +8,7 @@ pub fn rx_loop(mut reader: Reader) {
     let mut device = rx_setup(108, *b"abcde", 27, 1, 0);
     let mut buf = [0u8; 4096];
     loop {
-        sleep(Duration::from_millis(500));
+        sleep(Duration::from_millis(1));
         if device.data_available().unwrap() {
             device
                 .read_all(|packet| {
@@ -18,8 +18,6 @@ pub fn rx_loop(mut reader: Reader) {
                     //reader.read_exact(&mut buf).unwrap();
                 })
                 .unwrap();
-            // prepare ack payload for next reception
-            device.push(0, b"ack payload").unwrap();
             let result = reader.read(&mut buf);
             match result {
                 Ok(n) => println!("{} bytes read from interface", n),
