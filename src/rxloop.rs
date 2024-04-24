@@ -1,4 +1,4 @@
-use crate::BUFFER_SIZE;
+use crate::{BUFFER_SIZE, PACKET_SIZE, QUEUE_SIZE};
 use nrf24l01::NRF24L01;
 use std::io::Write;
 use std::thread::sleep;
@@ -13,7 +13,9 @@ pub fn rx_loop(mut device: NRF24L01, mut writer: Writer) {
         // the .is_err() is a very slow function see flamegraph
         while end <= 20 || packet::ip::v4::Packet::new(&buf[..end]).is_err() {
             sleep(Duration::from_micros(10));
-            if end + 96 >= BUFFER_SIZE {
+            // Avoid buffer overflow in case of failure.
+            if end + PACKET_SIZE * QUEUE_SIZE >= BUFFER_SIZE {
+                println!("Something terrible happened!");
                 end = 0;
             }
             //sleep(Duration::from_micros(10));
