@@ -14,6 +14,7 @@ pub fn rx_loop(mut device: NRF24L01, mut writer: Writer) {
         while end <= 20 || packet::ip::v4::Packet::new(&buf[..end]).is_err() {
             sleep(Duration::from_micros(10));
             if end + 96 >= BUFFER_SIZE {
+                println!("Something terrible happened!");
                 end = 0;
             }
             //sleep(Duration::from_micros(10));
