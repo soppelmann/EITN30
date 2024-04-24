@@ -1,8 +1,8 @@
 use crate::BUFFER_SIZE;
 use nrf24l01::NRF24L01;
 use std::io::Write;
-//use std::thread::sleep;
-//use std::time::Duration;
+use std::thread::sleep;
+use std::time::Duration;
 use tun2::platform::posix::Writer;
 
 pub fn rx_loop(mut device: NRF24L01, mut writer: Writer) {
@@ -11,7 +11,8 @@ pub fn rx_loop(mut device: NRF24L01, mut writer: Writer) {
     loop {
         end = 0;
         // the .is_err() is a very slow function see flamegraph
-        while end <= 64 || packet::ip::v4::Packet::new(&buf[..end]).is_err() {
+        while end <= 20 || packet::ip::v4::Packet::new(&buf[..end]).is_err() {
+            sleep(Duration::from_micros(10));
             if end + 96 >= BUFFER_SIZE {
                 end = 0;
             }
