@@ -1,9 +1,9 @@
 use crate::BUFFER_SIZE;
+use nrf24l01::NRF24L01;
 use std::io::Write;
 use std::thread::sleep;
 use std::time::Duration;
 use tun2::platform::posix::Writer;
-use nrf24l01::NRF24L01;
 
 pub fn rx_loop(mut device: NRF24L01, mut writer: Writer) {
     let mut buf = [0u8; BUFFER_SIZE];
@@ -13,6 +13,9 @@ pub fn rx_loop(mut device: NRF24L01, mut writer: Writer) {
         end = 0;
         emptybuf = true;
         while emptybuf || packet::ip::Packet::new(&buf[..end]).is_err() {
+            if end + 96 >= BUFFER_SIZE {
+                end = 0;
+            }
             sleep(Duration::from_millis(1));
             match device.data_available() {
                 Ok(true) => {
