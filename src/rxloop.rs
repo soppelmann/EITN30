@@ -15,6 +15,7 @@ pub fn rx_loop(mut device: NRF24L01, mut writer: Writer) {
         while emptybuf || packet::ip::Packet::new(&buf[..end]).is_err() {
             if end + 96 >= BUFFER_SIZE {
                 end = 0;
+                emptybuf = true;
             }
             sleep(Duration::from_millis(1));
             match device.data_available() {
