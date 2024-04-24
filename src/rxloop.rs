@@ -41,6 +41,6 @@ pub fn rx_loop(mut device: NRF24L01, mut writer: Writer) {
             }
         }
         println!("Writing {} bytes to interface", end);
-        writer.write(&buf[..end]).unwrap();
+        _ = writer.write(&buf[..end]).unwrap();
     }
 }
