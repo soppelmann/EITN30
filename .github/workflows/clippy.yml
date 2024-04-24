@@ -13,4 +13,4 @@ jobs:
         with:
           toolchain: 1.75.0
           components: clippy
-      - run: cargo clippy --all-features -- --deny=warnings
+      - run: rm -rf .cargo; cargo clippy --all-features -- --deny=warnings
