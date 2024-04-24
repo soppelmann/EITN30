@@ -1,8 +1,8 @@
 use crate::BUFFER_SIZE;
 use nrf24l01::NRF24L01;
 use std::io::Write;
-use std::thread::sleep;
-use std::time::Duration;
+//use std::thread::sleep;
+//use std::time::Duration;
 use tun2::platform::posix::Writer;
 
 pub fn rx_loop(mut device: NRF24L01, mut writer: Writer) {
@@ -17,7 +17,7 @@ pub fn rx_loop(mut device: NRF24L01, mut writer: Writer) {
                 end = 0;
                 emptybuf = true;
             }
-            sleep(Duration::from_micros(10));
+            //sleep(Duration::from_micros(10));
             match device.data_available() {
                 Ok(true) => {
                     emptybuf = false;

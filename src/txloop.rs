@@ -3,8 +3,8 @@ use crate::{BUFFER_SIZE, PACKET_SIZE, QUEUE_SIZE, TX_RETRIES};
 use std::io::Read;
 //use std::net::Ipv4Addr;
 use nrf24l01::NRF24L01;
-use std::thread::sleep;
-use std::time::Duration;
+//use std::thread::sleep;
+//use std::time::Duration;
 use tun2::platform::posix::Reader;
 
 pub fn tx_loop(mut device: NRF24L01, mut reader: Reader) {
@@ -47,6 +47,6 @@ pub fn tx_loop(mut device: NRF24L01, mut reader: Reader) {
                 println!("{} error when reading from interface", err)
             }
         }
-        sleep(Duration::from_micros(20));
+        //sleep(Duration::from_micros(20));
     }
 }
