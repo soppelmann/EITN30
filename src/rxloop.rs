@@ -13,7 +13,7 @@ pub fn rx_loop(mut device: NRF24L01, mut writer: Writer) {
         end = 0;
         emptybuf = true;
         // the .is_err() is a very slow function see flamegraph
-        while end <= 48 || emptybuf || packet::ip::v4::Packet::new(&buf[..end]).is_err() {
+        while end <= 64 || emptybuf || packet::ip::v4::Packet::new(&buf[..end]).is_err() {
             if end + 96 >= BUFFER_SIZE {
                 end = 0;
                 emptybuf = true;
