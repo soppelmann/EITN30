@@ -7,12 +7,12 @@ use tun2 as tun;
 
 fn main() -> Result<()> {
     color_eyre::install()?;
-    println!("Welcome to PiNET!");
+    println!("Welcome to PiNET!\n We hope you dont like IPv6 because we DONT support it!");
 
     let mut config = tun::Configuration::default();
     config
         .tun_name("longge")
-        .address((172, 0, 0, 69))
+        .address((192, 168, 12, 240))
         //.destination((192, 168, 12, 100))
         .netmask((255, 255, 255, 0))
         //.mtu(900)
@@ -32,7 +32,7 @@ fn main() -> Result<()> {
         "--base" => {
             tx_address = *b"abcde";
             rx_address = *b"12345";
-            config.address((172, 0, 0, 70));
+            config.address((192, 168, 12, 241));
         }
         "--mobile" => {}
         _ => {
