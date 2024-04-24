@@ -12,6 +12,7 @@ pub fn rx_loop(mut device: NRF24L01, mut writer: Writer) {
     loop {
         end = 0;
         emptybuf = true;
+        // the .is_err() is a very slow function see flamegraph
         while end <= 48 || emptybuf || packet::ip::v4::Packet::new(&buf[..end]).is_err() {
             if end + 96 >= BUFFER_SIZE {
                 end = 0;
@@ -23,8 +24,8 @@ pub fn rx_loop(mut device: NRF24L01, mut writer: Writer) {
                     emptybuf = false;
                     device
                         .read_all(|packet| {
-                            println!("Received {:?} bytes", packet.len());
-                            println!("Payload {}", String::from_utf8_lossy(packet));
+                            // println!("Received {:?} bytes", packet.len());
+                            // println!("Payload {}", String::from_utf8_lossy(packet));
                             let start = end;
                             end += packet.len();
                             buf[start..end].copy_from_slice(packet);
