@@ -8,4 +8,5 @@ edition = "2021"
 nrf24l01 = { git = "https://github.com/soppelmann/rust-nrf24.git" }
 tun2 = "1.3.0"
 color-eyre = "0.6.3"
+current_platform = "0.2.0"
 packet = "0.1"

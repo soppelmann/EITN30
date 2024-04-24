@@ -4,10 +4,11 @@ use eitn_30::{rxloop::rx_loop, txloop::tx_loop};
 use std::env;
 use std::thread;
 use tun2 as tun;
+use current_platform::COMPILED_ON;
 
 fn main() -> Result<()> {
     color_eyre::install()?;
-    println!("Welcome to PiNET!\n We hope you dont like IPv6 because we DONT support it!");
+    println!("Welcome to PiNET!\n We hope you dont like IPv6 because we DONT support it!\n This binary was compiled on {}", COMPILED_ON);
 
     let mut config = tun::Configuration::default();
     config
