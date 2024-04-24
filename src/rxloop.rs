@@ -23,8 +23,8 @@ pub fn rx_loop(mut device: NRF24L01, mut writer: Writer) {
                     emptybuf = false;
                     device
                         .read_all(|packet| {
-                            println!("Received {:?} bytes", packet.len());
-                            println!("Payload {}", String::from_utf8_lossy(packet));
+                            //println!("Received {:?} bytes", packet.len());
+                            //println!("Payload {}", String::from_utf8_lossy(packet));
                             let start = end;
                             end += packet.len();
                             buf[start..end].copy_from_slice(packet);
@@ -40,7 +40,7 @@ pub fn rx_loop(mut device: NRF24L01, mut writer: Writer) {
                 }
             }
         }
-        println!("Writing {} bytes to interface", end);
+        //println!("Writing {} bytes to interface", end);
         _ = writer.write(&buf[..end]).unwrap();
     }
 }

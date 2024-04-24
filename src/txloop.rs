@@ -13,7 +13,7 @@ pub fn tx_loop(mut device: NRF24L01, mut reader: Reader) {
         let result = reader.read(&mut buf);
         match result {
             Ok(n) => {
-                println!("{} bytes read from interface", n);
+                //println!("{} bytes read from interface", n);
 
                 let pkt = &buf[0..n];
 
@@ -27,8 +27,8 @@ pub fn tx_loop(mut device: NRF24L01, mut reader: Reader) {
                     // attempt transmit 10 times using device.send() with a for loop for erros
                     for i in 0..TX_RETRIES {
                         match device.send() {
-                            Ok(retries) => {
-                                println!("message sent, {} retries needed", retries);
+                            Ok(_) => {
+                                //println!("message sent, {} retries needed", retries);
                                 break;
                             }
                             Err(err) => {
