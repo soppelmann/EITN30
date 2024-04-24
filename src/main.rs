@@ -1,14 +1,21 @@
+use build_time::build_time_local;
 use color_eyre::eyre::Result;
+use current_platform::COMPILED_ON;
 use eitn_30::{rx_setup, tx_setup};
 use eitn_30::{rxloop::rx_loop, txloop::tx_loop};
 use std::env;
 use std::thread;
 use tun2 as tun;
-use current_platform::COMPILED_ON;
 
 fn main() -> Result<()> {
     color_eyre::install()?;
-    println!("Welcome to PiNET!\n We hope you dont like IPv6 because we DONT support it!\n This binary was compiled on {}", COMPILED_ON);
+
+    println!("Welcome to PiNET!\n We hope you dont like IPv6 because we DONT support it!\n This binary was compiled on {}\n", COMPILED_ON);
+
+    // Returns the local build timestamp in the specified format.
+    let local_build_time = build_time_local!("%Y-%m-%dT%H:%M:%S%.f%:z");
+
+    println!("Local build time: {}\n", local_build_time);
 
     let mut config = tun::Configuration::default();
     config
