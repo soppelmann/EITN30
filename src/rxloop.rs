@@ -12,7 +12,7 @@ pub fn rx_loop(mut device: NRF24L01, mut writer: Writer) {
     loop {
         end = 0;
         emptybuf = true;
-        while emptybuf || packet::ip::v4::Packet::new(&buf[..end]).is_err() {
+        while end <= 48 || emptybuf || packet::ip::v4::Packet::new(&buf[..end]).is_err() {
             if end + 96 >= BUFFER_SIZE {
                 end = 0;
                 emptybuf = true;
