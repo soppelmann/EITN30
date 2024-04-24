@@ -17,7 +17,7 @@ pub fn rx_loop(mut device: NRF24L01, mut writer: Writer) {
                 end = 0;
                 emptybuf = true;
             }
-            sleep(Duration::from_millis(1));
+            sleep(Duration::from_micros(10));
             match device.data_available() {
                 Ok(true) => {
                     emptybuf = false;
