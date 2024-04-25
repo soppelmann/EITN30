@@ -18,7 +18,6 @@ pub fn rx_loop(mut device: NRF24L01, mut writer: Writer) {
                 println!("Something terrible happened!");
                 end = 0;
             }
-            //sleep(Duration::from_micros(10));
             match device.data_available() {
                 Ok(true) => {
                     device
@@ -41,6 +40,7 @@ pub fn rx_loop(mut device: NRF24L01, mut writer: Writer) {
             }
         }
         println!("Writing {} bytes to interface", end);
+        // Probably want to make this async
         _ = writer.write(&buf[..end]).unwrap();
     }
 }
