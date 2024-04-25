@@ -186,3 +186,17 @@ Accepted connection from 192.168.12.240, port 41800
 [  5]   0.00-14.40  sec   553 KBytes   314 Kbits/sec                  receiver
 
 ```
+
+#### Results explained
+
+The devices have a specified 2Mbps is the over-the-air rate, or symbol rate.
+This speed is not to be seen as the highest possible throughput of these
+devices, you won't ever get this actual throughput as there's preambles,
+addresses, CRC's, ACKs and resends. But the time taken isn't just the transmit
+time, there is also time taken to enable the transmitter, time taken to send the
+32-byte packet via SPI - which may have quite a few delays depending on the
+routine you use, switching channels, and the time taken for the receiver micro
+to read out the packet from its SPI port.
+
+Also note, given how common bit errors are, often a packet has to be resent as
+there is no Forward error correction (FEC), just error checking.
