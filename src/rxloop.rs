@@ -1,11 +1,13 @@
 use crate::{BUFFER_SIZE, PACKET_SIZE, QUEUE_SIZE};
 use nrf24l01::NRF24L01;
 use std::io::Write;
+use std::sync::{Arc, Mutex};
+use std::thread;
 use std::thread::sleep;
 use std::time::Duration;
 use tun2::platform::posix::Writer;
 
-pub fn rx_loop(mut device: NRF24L01, mut writer: Writer) {
+pub fn rx_loop(mut device: NRF24L01, writer: Arc<Mutex<Writer>>) {
     let mut buf = [0u8; BUFFER_SIZE];
     let mut total_length: u16 = 3;
     let mut end;
@@ -21,12 +23,11 @@ pub fn rx_loop(mut device: NRF24L01, mut writer: Writer) {
                 end = 0;
             }
 
+            // Fill a buffer with received data
             match device.data_available() {
                 Ok(true) => {
                     device
                         .read_all(|packet| {
-                            // println!("Received {:?} bytes", packet.len());
-                            // println!("Payload {}", String::from_utf8_lossy(packet));
                             let start = end;
                             end += packet.len();
                             buf[start..end].copy_from_slice(packet);
@@ -34,28 +35,32 @@ pub fn rx_loop(mut device: NRF24L01, mut writer: Writer) {
                         .unwrap();
                 }
 
-                Ok(false) => {
-                    //println!("No data available"); //this causes spam
-                }
+                Ok(false) => {}
                 Err(e) => {
                     println!("Error: {}", e);
                 }
             }
 
             // Better ipv4 is_err(check)
-            // Need to treat bytes 2 and 3 as one long number
+            // We find out the Total Length of the packet using bytes 2 and 3.
             // see: https://en.wikipedia.org/wiki/Internet_Protocol_version_4#Total_Length
             if init && end == 32 {
+                // This might break if receiving a packet smaller than 32 bytes
                 let length_slice = &buf[2..4];
                 total_length = u16::from_be_bytes([length_slice[0], length_slice[1]]);
                 init = false;
-                //println!("This packet should be size: {:?}", total_length);
             }
 
+            // Write if its not first iteration and we have received the amount
+            // of bytes that was listed in the IPv4 Total leangth field in the
+            // header. We need to create a mutex and massage rust but it works
             if !init && end == total_length as usize {
-                //println!("Writing {} bytes to interface", end);
-                // Probably want to make this async
-                _ = writer.write(&buf[..end]).unwrap();
+                let tun_writer_clone = writer.clone();
+                let _tun_writer = thread::spawn(move || {
+                    let mut writer_ref = tun_writer_clone.lock().unwrap(); // Get a mutable reference
+                    _ = writer_ref.write(&buf[..end]).unwrap();
+                });
+
                 break;
             }
         }
