@@ -41,8 +41,11 @@ fn main() -> Result<()> {
             tx_address = *b"abcde";
             rx_address = *b"12345";
             config.address((192, 168, 12, 241));
+            println!("My address is 192.168.12.241");
         }
-        "--mobile" => {}
+        "--mobile" => {
+            println!("My address is 192.168.12.240");
+        }
         _ => {
             println!("Invalid flag. Use either --base or --mobile.");
             return Ok(());
