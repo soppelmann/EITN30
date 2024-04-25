@@ -6,7 +6,6 @@ use std::time::Duration;
 use tun2::platform::posix::Reader;
 
 pub fn transmit(mut device: NRF24L01) -> NRF24L01 {
-    println!("Hello, {}", device.is_receiver());
     for i in 0..TX_RETRIES {
         match device.send() {
             Ok(_) => {
