@@ -7,23 +7,18 @@ use tun2::platform::posix::Writer;
 
 pub fn rx_loop(mut device: NRF24L01, mut writer: Writer) {
     let mut buf = [0u8; BUFFER_SIZE];
+    let mut total_length: u16 = 3;
     let mut end;
+    let mut init;
     loop {
         end = 0;
-        // the .is_err() is a very slow function see flamegraph
-        while end <= 20 || packet::ip::v4::Packet::new(&buf[..end]).is_err() {
+        init = true;
+        loop {
             sleep(Duration::from_micros(10));
             // Avoid buffer overflow in case of failure.
             if end + PACKET_SIZE * QUEUE_SIZE >= BUFFER_SIZE {
                 println!("Something terrible happened!");
                 end = 0;
-            }
-
-            // Better ipv4 is_err(check)
-            // Need to treat bytes 2 and 3 as one long number
-            // see: https://en.wikipedia.org/wiki/Internet_Protocol_version_4#Total_Length
-            if end >= 3 {
-                println!("This packet should be size: {:?}", &buf[2..4]);
             }
 
             match device.data_available() {
@@ -46,9 +41,23 @@ pub fn rx_loop(mut device: NRF24L01, mut writer: Writer) {
                     println!("Error: {}", e);
                 }
             }
+
+            // Better ipv4 is_err(check)
+            // Need to treat bytes 2 and 3 as one long number
+            // see: https://en.wikipedia.org/wiki/Internet_Protocol_version_4#Total_Length
+            if init && end == 32 {
+                let length_slice = &buf[2..4];
+                total_length = u16::from_be_bytes([length_slice[0], length_slice[1]]);
+                init = false;
+                //println!("This packet should be size: {:?}", total_length);
+            }
+
+            if !init && end == total_length as usize {
+                //println!("Writing {} bytes to interface", end);
+                // Probably want to make this async
+                _ = writer.write(&buf[..end]).unwrap();
+                break;
+            }
         }
-        println!("Writing {} bytes to interface", end);
-        // Probably want to make this async
-        _ = writer.write(&buf[..end]).unwrap();
     }
 }
