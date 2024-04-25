@@ -18,6 +18,14 @@ pub fn rx_loop(mut device: NRF24L01, mut writer: Writer) {
                 println!("Something terrible happened!");
                 end = 0;
             }
+
+            // Better ipv4 is_err(check)
+            // Need to treat bytes 2 and 3 as one long number
+            // see: https://en.wikipedia.org/wiki/Internet_Protocol_version_4#Total_Length
+            if end >= 3 {
+                println!("This packet should be size: {:?}", &buf[2..4]);
+            }
+
             match device.data_available() {
                 Ok(true) => {
                     device
