@@ -31,7 +31,6 @@ pub fn tx_loop(mut device: NRF24L01, mut reader: Reader) {
         let result = reader.read(&mut buf);
         match result {
             Ok(n) => {
-                //println!("{} bytes read from interface", n);
                 let pkt = &buf[0..n];
                 // Split the packet into 32 byte chunks that can we push to the device
                 for queue in pkt.chunks(PACKET_SIZE * QUEUE_SIZE) {

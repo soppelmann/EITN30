@@ -4,6 +4,7 @@ use current_platform::COMPILED_ON;
 use eitn_30::{rx_setup, tx_setup};
 use eitn_30::{rxloop::rx_loop, txloop::tx_loop};
 use std::env;
+use std::sync::{Arc, Mutex};
 use std::thread;
 use tun2 as tun;
 
@@ -59,12 +60,15 @@ fn main() -> Result<()> {
 
     let (reader, writer) = iface.split();
 
+    let writer = Mutex::new(writer);
+    let shared_writer = Arc::new(writer);
+
     let tx_handler = thread::spawn(move || {
         tx_loop(tx_device, reader);
     });
 
     let rx_handler = thread::spawn(move || {
-        rx_loop(rx_device, writer);
+        rx_loop(rx_device, shared_writer);
     });
     rx_handler.join().unwrap();
     tx_handler.join().unwrap();
