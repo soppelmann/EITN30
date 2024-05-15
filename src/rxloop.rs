@@ -20,7 +20,7 @@ pub fn rx_loop(mut device: NRF24L01, writer: Arc<Mutex<Writer>>) {
             // Avoid buffer overflow in case of failure.
             if end + PACKET_SIZE * QUEUE_SIZE >= BUFFER_SIZE {
                 println!("Something terrible happened!");
-                end = 0;
+                //end = 0;
             }
 
             // Fill a buffer with received data
