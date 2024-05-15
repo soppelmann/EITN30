@@ -10,11 +10,9 @@ use tun2::platform::posix::Writer;
 pub fn rx_loop(mut device: NRF24L01, writer: Arc<Mutex<Writer>>) {
     let mut buf = [0u8; BUFFER_SIZE];
     let mut end;
-    //let mut init;
     loop {
         end = 0;
-        //init = true;
-        while packet::ip::v4::Packet::new(&buf[..end]).is_err() {
+        while packet::ip::v4::Packet::new(&buf[..end]).is_err() || packet::ip::v6::Packet::new(&buf[..end]).is_err() {
             sleep(Duration::from_micros(10));
             // Avoid buffer overflow in case of failure.
             if end + PACKET_SIZE * QUEUE_SIZE >= BUFFER_SIZE {
