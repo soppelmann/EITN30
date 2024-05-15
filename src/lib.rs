@@ -39,7 +39,7 @@ pub fn tx_setup(chan: u8, address: [u8; 5], pin: u64, port: u8, device: u8) -> N
         pipe0_address: address,
         data_rate: DataRate::R2Mbps,
         max_retries: 5,
-        retry_delay: 1,
+        retry_delay: 5,
     };
 
     let mut device = NRF24L01::new(pin, port, device).unwrap();
