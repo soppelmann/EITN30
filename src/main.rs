@@ -24,7 +24,7 @@ fn main() -> Result<()> {
         .address((192, 168, 12, 240))
         //.destination((192, 168, 12, 241))
         .netmask((255, 255, 255, 0))
-        .mtu(32)
+        .mtu(68)
         .up();
 
     let mut tx_address = *b"12345";
