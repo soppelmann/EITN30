@@ -22,9 +22,9 @@ fn main() -> Result<()> {
     config
         .tun_name("longge")
         .address((192, 168, 12, 240))
-        .destination((192, 168, 12, 241))
+        //.destination((192, 168, 12, 241))
         .netmask((255, 255, 255, 0))
-        //.mtu(900)
+        .mtu(900)
         .up();
 
     let mut tx_address = *b"12345";
@@ -42,7 +42,7 @@ fn main() -> Result<()> {
             tx_address = *b"abcde";
             rx_address = *b"12345";
             config.address((192, 168, 12, 241));
-            config.destination((192, 168, 12, 240));
+            //config.destination((192, 168, 12, 240));
             println!("My address is 192.168.12.241");
         }
         "--mobile" => {
