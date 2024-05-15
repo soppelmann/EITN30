@@ -49,6 +49,6 @@ pub fn tx_loop(mut device: NRF24L01, mut reader: Reader) {
                 println!("{} error when reading from interface", err)
             }
         }
-        sleep(Duration::from_micros(1));
+        sleep(Duration::from_micros(100));
     }
 }
