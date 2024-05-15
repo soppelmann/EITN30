@@ -2,7 +2,7 @@ use nrf24l01::{DataRate, OperatingMode, PALevel, RXConfig, TXConfig, NRF24L01};
 pub mod rxloop;
 pub mod txloop;
 pub const PACKET_SIZE: usize = 32;
-pub const QUEUE_SIZE: usize = 3;
+pub const QUEUE_SIZE: usize = 2;
 pub const TX_RETRIES: u8 = 10;
 pub const BUFFER_SIZE: usize = 4096;
 
