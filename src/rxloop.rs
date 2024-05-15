@@ -16,7 +16,7 @@ pub fn rx_loop(mut device: NRF24L01, writer: Arc<Mutex<Writer>>) {
             || (packet::ip::v4::Packet::new(&buf[..end]).is_err()
                 && packet::ip::v6::Packet::new(&buf[..end]).is_err())
         {
-            sleep(Duration::from_micros(10));
+            sleep(Duration::from_micros(25));
             // Avoid buffer overflow in case of failure.
             if end + PACKET_SIZE * QUEUE_SIZE >= BUFFER_SIZE {
                 println!("Something terrible happened!");
