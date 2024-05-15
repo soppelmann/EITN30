@@ -14,7 +14,7 @@ pub fn rx_loop(mut device: NRF24L01, writer: Arc<Mutex<Writer>>) {
     loop {
         end = 0;
         //init = true;
-        while end <= 20 || packet::ip::v4::Packet::new(&buf[..end]).is_err() {
+        while packet::ip::v4::Packet::new(&buf[..end]).is_err() {
             sleep(Duration::from_micros(10));
             // Avoid buffer overflow in case of failure.
             if end + PACKET_SIZE * QUEUE_SIZE >= BUFFER_SIZE {
