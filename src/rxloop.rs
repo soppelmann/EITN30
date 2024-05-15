@@ -49,6 +49,5 @@ pub fn rx_loop(mut device: NRF24L01, writer: Arc<Mutex<Writer>>) {
             let mut writer_ref = tun_writer_clone.lock().unwrap(); // Get a mutable reference
             _ = writer_ref.write(&buf[..end]).unwrap();
         });
-        break;
     }
 }
