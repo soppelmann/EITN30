@@ -44,7 +44,8 @@ pub fn rx_loop(mut device: NRF24L01, writer: Arc<Mutex<Writer>>) {
             // Better ipv4 is_err(check)
             // We find out the Total Length of the packet using bytes 2 and 3.
             // see: https://en.wikipedia.org/wiki/Internet_Protocol_version_4#Total_Length
-            if init && end <= 32 {
+            if init && end == 32 {
+                // This might break if receiving a packet smaller than 32 bytes
                 let length_slice = &buf[2..4];
                 total_length = u16::from_be_bytes([length_slice[0], length_slice[1]]);
                 init = false;
