@@ -37,6 +37,7 @@ pub fn rx_loop(mut device: NRF24L01, writer: Arc<Mutex<Writer>>) {
 
                 Ok(false) => {}
                 Err(e) => {
+                    device.flush_input().unwrap();
                     println!("Error: {}", e);
                 }
             }
