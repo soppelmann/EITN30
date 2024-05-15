@@ -12,7 +12,7 @@ pub fn rx_loop(mut device: NRF24L01, writer: Arc<Mutex<Writer>>) {
     let mut end;
     loop {
         end = 0;
-        while packet::ip::v4::Packet::new(&buf[..end]).is_err() {
+        while packet::ip::v4::Packet::new(&buf[..end]).is_err() && packet::ip::v6::Packet::new(&buf[..end]).is_err() {
             sleep(Duration::from_micros(10));
             // Avoid buffer overflow in case of failure.
             if end + PACKET_SIZE * QUEUE_SIZE >= BUFFER_SIZE {
