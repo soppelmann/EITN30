@@ -1,7 +1,7 @@
-use crate::{ BUFFER_SIZE, PACKET_SIZE, QUEUE_SIZE };
+use crate::{BUFFER_SIZE, PACKET_SIZE, QUEUE_SIZE};
 use nrf24l01::NRF24L01;
 use std::io::Write;
-use std::sync::{ Arc, Mutex };
+use std::sync::{Arc, Mutex};
 use std::thread;
 use std::thread::sleep;
 use std::time::Duration;
@@ -12,8 +12,11 @@ pub fn rx_loop(mut device: NRF24L01, writer: Arc<Mutex<Writer>>) {
     let mut end;
     loop {
         end = 0;
-        while packet::ip::v4::Packet::new(&buf[..end]).is_err() || packet::ip::v6::Packet::new(&buf[..end]).is_err() {
-            sleep(Duration::from_micros(10));
+        while end <= 20
+            || (packet::ip::v4::Packet::new(&buf[..end]).is_err()
+                && packet::ip::v6::Packet::new(&buf[..end]).is_err())
+        {
+            sleep(Duration::from_micros(25));
             // Avoid buffer overflow in case of failure.
             if end + PACKET_SIZE * QUEUE_SIZE >= BUFFER_SIZE {
                 println!("Something terrible happened!");
