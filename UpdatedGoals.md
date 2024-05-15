@@ -43,7 +43,7 @@ in overcoming technical challenges and leveraging innovative solutions to
 achieve project objectives. We are proud of our accomplishment and confident in
 the scalability and reliability of the deployed system for future applications.
 
-### Goals
+## Goals
 
 1. [x] Create a rust driver for the nrf24l01 for the Raspberry Pi 5.
    - **Comment:** Successfully achieved by porting an existing Rust driver for
@@ -83,3 +83,65 @@ the scalability and reliability of the deployed system for future applications.
 Overall, the team successfully met all goals outlined in the project plan,
 demonstrating proficiency in both technical implementation and project
 management aspects.
+
+## Performance results
+
+### iperf3 results
+
+We have tested the throughput of the nrf24l01 link using iperf3. The results are
+as follows:
+
+```
+-----------------------------------------------------------
+CLIENT
+-----------------------------------------------------------
+
+iperf3 -c 192.168.12.241%longge
+Connecting to host 192.168.12.241, port 5201
+[  5] local 192.168.12.240 port 41810 connected to 192.168.12.241 port 5201
+[ ID] Interval           Transfer     Bitrate         Retr  Cwnd
+[  5]   0.00-1.00   sec   232 KBytes  1.90 Mbits/sec    0   33.9 KBytes
+[  5]   1.00-2.00   sec  0.00 Bytes  0.00 bits/sec    0   35.4 KBytes
+[  5]   2.00-3.00   sec   112 KBytes   915 Kbits/sec    0   38.2 KBytes
+[  5]   3.00-4.00   sec  0.00 Bytes  0.00 bits/sec    0   45.2 KBytes
+[  5]   4.00-5.00   sec   127 KBytes  1.04 Mbits/sec    0   62.2 KBytes
+[  5]   5.00-6.00   sec   191 KBytes  1.56 Mbits/sec    0   82.0 KBytes
+[  5]   6.00-7.00   sec  0.00 Bytes  0.00 bits/sec    0    102 KBytes
+[  5]   7.00-8.00   sec   255 KBytes  2.08 Mbits/sec    0    122 KBytes
+[  5]   8.00-9.00   sec  0.00 Bytes  0.00 bits/sec    0    141 KBytes
+[  5]   9.00-10.00  sec   382 KBytes  3.13 Mbits/sec    0    161 KBytes
+- - - - - - - - - - - - - - - - - - - - - - - - -
+[ ID] Interval           Transfer     Bitrate         Retr
+[  5]   0.00-10.00  sec  1.27 MBytes  1.06 Mbits/sec    0             sender
+[  5]   0.00-14.40  sec   553 KBytes   314 Kbits/sec                  receiver
+
+-----------------------------------------------------------
+SERVER
+-----------------------------------------------------------
+
+iperf3 -s
+-----------------------------------------------------------
+Server listening on 5201 (test #1)
+-----------------------------------------------------------
+Accepted connection from 192.168.12.240, port 41800
+[  5] local 192.168.12.241 port 5201 connected to 192.168.12.240 port 41810
+[ ID] Interval           Transfer     Bitrate
+[  5]   0.00-1.00   sec  38.2 KBytes   313 Kbits/sec
+[  5]   1.00-2.00   sec  39.6 KBytes   324 Kbits/sec
+[  5]   2.00-3.00   sec  38.2 KBytes   313 Kbits/sec
+[  5]   3.00-4.00   sec  39.6 KBytes   324 Kbits/sec
+[  5]   4.00-5.00   sec  39.6 KBytes   324 Kbits/sec
+[  5]   5.00-6.00   sec  39.6 KBytes   324 Kbits/sec
+[  5]   6.00-7.00   sec  39.6 KBytes   324 Kbits/sec
+[  5]   7.00-8.00   sec  39.6 KBytes   324 Kbits/sec
+[  5]   8.00-9.00   sec  39.6 KBytes   324 Kbits/sec
+[  5]   9.00-10.00  sec  38.2 KBytes   313 Kbits/sec
+[  5]  10.00-11.00  sec  39.6 KBytes   324 Kbits/sec
+[  5]  11.00-12.00  sec  35.4 KBytes   290 Kbits/sec
+[  5]  12.00-13.00  sec  36.8 KBytes   301 Kbits/sec
+[  5]  13.00-14.00  sec  33.9 KBytes   278 Kbits/sec
+[  5]  14.00-14.40  sec  15.6 KBytes   316 Kbits/sec
+- - - - - - - - - - - - - - - - - - - - - - - - -
+[ ID] Interval           Transfer     Bitrate
+[  5]   0.00-14.40  sec   553 KBytes   314 Kbits/sec                  receiver
+```
