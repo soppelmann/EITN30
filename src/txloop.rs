@@ -14,7 +14,7 @@ pub fn transmit(mut device: NRF24L01) -> NRF24L01 {
             }
             Err(err) => {
                 println!("destination unreachable: {:?}", err);
-                if i == 2 {
+                if i == (TX_RETRIES - 1) {
                     println!("max retries reached: {}, flushing output", i);
                     device.flush_output().unwrap();
                 }
@@ -49,6 +49,6 @@ pub fn tx_loop(mut device: NRF24L01, mut reader: Reader) {
                 println!("{} error when reading from interface", err)
             }
         }
-        sleep(Duration::from_micros(100));
+        sleep(Duration::from_micros(10));
     }
 }

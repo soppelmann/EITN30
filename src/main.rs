@@ -12,6 +12,7 @@ fn main() -> Result<()> {
     color_eyre::install()?;
 
     println!("Welcome to PiNET!\n We hope you dont like IPv6 because we DONT support it!\n This binary was compiled on {}\n", COMPILED_ON);
+    println!("Just kidding! We love IPv6! And it's now supported! :D\n");
 
     // Returns the local build timestamp in the specified format.
     let local_build_time = build_time_local!("%Y-%m-%dT%H:%M:%S%.f%:z");
