@@ -11,7 +11,7 @@ pub fn rx_loop(mut device: NRF24L01, writer: Arc<Mutex<Writer>>) {
     let mut buf = [0u8; BUFFER_SIZE];
     let mut end;
     loop {
-        loop {
+        'outer: loop {
             end = 0;
             while end == 0
                 || (packet::ip::v4::Packet::new(&buf[..end]).is_err()
@@ -22,8 +22,8 @@ pub fn rx_loop(mut device: NRF24L01, writer: Arc<Mutex<Writer>>) {
                 if end + PACKET_SIZE * QUEUE_SIZE >= BUFFER_SIZE {
                     println!("Something terrible happened!");
                     device.flush_input().unwrap();
-                    sleep(Duration::from_millis(100));
-                    break;
+                    sleep(Duration::from_micros(100));
+                    break 'outer;
                 }
 
                 // Fill a buffer with received data
