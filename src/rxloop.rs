@@ -22,6 +22,7 @@ pub fn rx_loop(mut device: NRF24L01, writer: Arc<Mutex<Writer>>) {
                 if end + PACKET_SIZE * QUEUE_SIZE >= BUFFER_SIZE {
                     println!("Something terrible happened!");
                     device.flush_input().unwrap();
+                    sleep(Duration::from_millis(100));
                     break;
                 }
 
