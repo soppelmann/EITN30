@@ -20,7 +20,9 @@ pub fn rx_loop(mut device: NRF24L01, writer: Arc<Mutex<Writer>>) {
                 sleep(Duration::from_micros(1));
                 // Avoid buffer overflow in case of failure.
                 if end + PACKET_SIZE * QUEUE_SIZE >= BUFFER_SIZE {
-                    println!("Something terrible happened!");
+                    println!("Something terrible happened!\n");
+                    println!("Restarting rx_thread ...\n");
+                    println!("Please wait for you nearest service technician to arrive\n");
                     device.flush_input().unwrap();
                     sleep(Duration::from_micros(100));
                     break 'outer;
