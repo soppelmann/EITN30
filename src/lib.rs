@@ -4,7 +4,7 @@ pub mod txloop;
 pub const PACKET_SIZE: usize = 32;
 pub const QUEUE_SIZE: usize = 3;
 pub const TX_RETRIES: u8 = 5;
-pub const BUFFER_SIZE: usize = 8192;
+pub const BUFFER_SIZE: usize = 4096;
 
 pub fn rx_setup(chan: u8, address: [u8; 5], pin: u64, port: u8, device: u8) -> NRF24L01 {
     if address.len() != 5 {
