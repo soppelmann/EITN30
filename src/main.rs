@@ -29,6 +29,8 @@ fn main() -> Result<()> {
 
     let mut tx_address = *b"12345";
     let mut rx_address = *b"abcde";
+    let mut chan_m: u8 = 108;
+    let mut chan_b: u8 = 113;
 
     let mut args: Vec<String> = env::args().collect();
 
@@ -41,8 +43,9 @@ fn main() -> Result<()> {
         "--base" => {
             tx_address = *b"abcde";
             rx_address = *b"12345";
+            chan_m = 113;
+            chan_b = 108;
             config.address((192, 168, 12, 241));
-            //config.destination((192, 168, 12, 240));
             println!("My address is 192.168.12.241");
         }
         "--mobile" => {
@@ -54,8 +57,8 @@ fn main() -> Result<()> {
         }
     }
 
-    let tx_device = tx_setup(108, tx_address, 17, 0, 0);
-    let rx_device = rx_setup(108, rx_address, 27, 1, 0);
+    let tx_device = tx_setup(chan_m, tx_address, 17, 0, 0);
+    let rx_device = rx_setup(chan_b, rx_address, 27, 1, 0);
 
     let iface = tun::create(&config).unwrap();
 
