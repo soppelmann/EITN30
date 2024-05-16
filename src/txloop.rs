@@ -8,8 +8,8 @@ use tun2::platform::posix::Reader;
 pub fn transmit(mut device: NRF24L01) -> NRF24L01 {
     for i in 0..TX_RETRIES {
         match device.send() {
-            Ok(retries) => {
-                println!("message sent, {} retries needed", retries);
+            Ok(_) => {
+                //println!("message sent, {} retries needed", retries);
                 break;
             }
             Err(err) => {
