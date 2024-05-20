@@ -13,12 +13,6 @@ pub fn transmit(mut device: NRF24L01) -> NRF24L01 {
                 break;
             }
             Err(err) => {
-                println!("destination unreachable: {:?}", err);
-                if i == (TX_RETRIES - 1) {
-                    println!("max retries reached: {}, flushing output", i);
-                    device.flush_output().unwrap();
-                }
-                println!("reached: {}", i);
             }
         };
     }
