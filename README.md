@@ -44,17 +44,17 @@ ethernet.
 3. Set the interface to promiscious mode (forwarding).
 4. Run the basestation code.
 ```bash
-cargo run --basestation
+make base
 ```
+5. Run the base_setup.sh while the longge link is up for routing the packets. 
 
 ### Mobile unit
 
 1. Connect the nrf24l01 to the Raspberry Pi 5.
 2. Run the mobile unit code.
 ```bash
-cargo run --mobile
+make mobile
 ```
-
 ## TUN interface
 
 The TUN interface is a virtual network device that allows us to send and receive
@@ -89,6 +89,8 @@ echo '1' | sudo tee /proc/sys/net/ipv4/conf/longge/forwarding
 sudo iptables -A FORWARD -i longge -o eth0 -j ACCEPT
 sudo iptables -A FORWARD -i eth0 -o longge -m state --state RELATED,ESTABLISHED -j ACCEPT
 ```
+
+The routing commands are collected in the script base_setup.sh for ease of use. 
 
 To avoid having all traffic go through the link we will also edit the routing
 table as shown at lecture 3.
