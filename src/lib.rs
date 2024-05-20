@@ -38,7 +38,7 @@ pub fn tx_setup(chan: u8, address: [u8; 5], pin: u64, port: u8, device: u8) -> N
         pa_level: PALevel::Max,
         pipe0_address: address,
         data_rate: DataRate::R2Mbps,
-        max_retries: 5,
+        max_retries: 0,
         retry_delay: 5,
     };
 
